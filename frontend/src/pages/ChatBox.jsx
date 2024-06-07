@@ -14,7 +14,7 @@ const ChatBox = ({messages, addMessage, newBranch}) => {
         {console.log(messages)}
         {messages.length === 0 ? messages : messages[0].map((message) => {
           if (message.role === 'query') {
-            return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id, false)} />
+            return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id, false)} /> // probably addMessage?
           } else {
             return <Response key={message.id} text = {message.text} />
           }
@@ -24,6 +24,8 @@ const ChatBox = ({messages, addMessage, newBranch}) => {
           ? <Query text='add query here' onClick={() => newBranch(1, true)} />
           : <Query text='add query here' onClick={() => newBranch(messages[0].length + 1, true)} />
         }
+
+        {/* need to accept input for the above thing to work */}
         
 
       </div>
