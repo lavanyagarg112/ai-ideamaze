@@ -1,0 +1,37 @@
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .scrollablecontainer {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    /* background-color: lightblue; */
+    padding: 10px;
+    border: 1px solid lightgray;
+    margin: 20px;
+    margin-top: 5px;
+  }
+  
+  .scrollablecontent {
+    padding: 10px;
+  }
+  
+  .item {
+    padding: 10px;
+    margin: 5px 0;
+    /* background-color: lightgray; */
+    border: 1px solid lightgray;
+  }
+  
+  .maincontent {
+    /* background-color: lightcoral; */
+    padding: 20px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  
