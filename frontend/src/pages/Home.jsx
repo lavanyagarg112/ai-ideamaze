@@ -34,7 +34,8 @@ const Home = () => {
     const handleClick = async (id) => {
         // API endpoint here for getting all messages
         await alert(`chatid ${id}`)
-        setMessages([])
+        const DUMMY_DATA = []
+        setMessages([...messages, ...DUMMY_DATA])
     }
 
     const addMessage = async (parentId) => {
@@ -50,10 +51,13 @@ const Home = () => {
         setMessages([DUMMY_DATA])
     }
 
+    // right now i am sending in an array of array of messages so i have to do messages[0].
+    // see if i can fix this
+
   return (
     <div className={classes.container}>
         <div className={classes.maincontent}>
-            <Maze onClick={(id) => handleClick()} addNode={newMessage} messages={messages} />
+            <Maze onClick={(id) => handleClick(id)} addNode={newMessage} messages={messages} />
         </div>
         <div className={classes.scrollablecontainer}>
             <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} />
