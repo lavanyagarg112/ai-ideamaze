@@ -12,6 +12,12 @@ const Home = () => {
 
     const DUMMY_DATA = [
         {
+            id: 0,
+            parent_id: 0,
+            role: 'query',
+            text: 'This is my first query'
+        },
+        {
             id: 1,
             parent_id: 0,
             role: 'response',
@@ -26,6 +32,66 @@ const Home = () => {
         {
             id: 3,
             parent_id: 2,
+            role: 'response',
+            text: 'This is my new message'
+        },
+        {
+            id: 4,
+            parent_id: 3,
+            role: 'query',
+            text: 'This is a new query'
+        },
+        {
+            id: 5,
+            parent_id: 4,
+            role: 'response',
+            text: 'This is my new message'
+        },
+        {
+            id: 6,
+            parent_id: 5,
+            role: 'query',
+            text: 'This is a new query'
+        },
+        {
+            id: 7,
+            parent_id: 6,
+            role: 'response',
+            text: 'This is my new message'
+        },
+        {
+            id: 8,
+            parent_id: 7,
+            role: 'query',
+            text: 'This is a new query'
+        },
+        {
+            id: 9,
+            parent_id: 8,
+            role: 'response',
+            text: 'This is my new message'
+        },
+        {
+            id: 10,
+            parent_id: 9,
+            role: 'query',
+            text: 'This is a new query'
+        },
+        {
+            id: 11,
+            parent_id: 10,
+            role: 'response',
+            text: 'This is my new message'
+        },
+        {
+            id: 12,
+            parent_id: 11,
+            role: 'query',
+            text: 'This is a new query'
+        },
+        {
+            id: 13,
+            parent_id: 12,
             role: 'response',
             text: 'This is my new message'
         }
