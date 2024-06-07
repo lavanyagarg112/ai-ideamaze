@@ -15,7 +15,7 @@ const ChatBox = ({messages, addMessage, newBranch}) => {
           if (message.role === 'query') {
             return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id)} />
           } else {
-            return <Response key={message.id} text = {message.text}  onClick={() => newBranch(message.id)} />
+            return <Response key={message.id} text = {message.text} />
           }
         }
         )}

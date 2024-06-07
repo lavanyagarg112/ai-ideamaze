@@ -3,7 +3,7 @@ import classes from './Chat.module.css'
 
 const Response = ({text, onClick}) => {
   return (
-    <div className={classes.response} onClick={onClick}>
+    <div className={classes.response}>
       {text}
     </div>
   )
