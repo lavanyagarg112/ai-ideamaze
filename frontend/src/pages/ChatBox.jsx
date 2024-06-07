@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Query from '../components/chat/QueryChat'
 import Response from '../components/chat/ResponseChat'
@@ -6,19 +6,26 @@ import Response from '../components/chat/ResponseChat'
 import classes from './Home.module.css'
 
 const ChatBox = ({messages, addMessage, newBranch}) => {
+
   return (
     <div className={classes.scrollablecontent}>
-      <Query text='add query here!' onClick={() => newBranch(0)} />
+      <Query text='SYSTEM' onClick={() => newBranch(0, false)} />
       <div>
         {console.log(messages)}
         {messages.length === 0 ? messages : messages[0].map((message) => {
           if (message.role === 'query') {
-            return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id)} />
+            return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id, false)} />
           } else {
             return <Response key={message.id} text = {message.text} />
           }
         }
         )}
+        {messages.length === 0
+          ? <Query text='add query here' onClick={() => newBranch(1, true)} />
+          : <Query text='add query here' onClick={() => newBranch(messages[0].length + 1, true)} />
+        }
+        
+
       </div>
     </div>
   )

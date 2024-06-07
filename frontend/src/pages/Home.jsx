@@ -45,7 +45,7 @@ const Home = () => {
         // send new message back to the maze, with parentid?
     }
 
-    const newBranch = async (id) => {
+    const newBranch = async (id, getMessage) => {
         await alert(`get next branch for ${id}`) // parent id
         // API end point for getting next branch and the whole thing to send it back to chatbox
         setMessages([DUMMY_DATA])
