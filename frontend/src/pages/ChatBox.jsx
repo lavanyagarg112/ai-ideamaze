@@ -14,15 +14,16 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
         {console.log("messages: ", messages)}
         {messages.length === 0 ? messages : messages.map((message) => {
           if (message.role === 'user') {
-            return <Query key={message.id} text={message.content || message.text} onClick={() => addMessage(message.id)} canChange={false}/>
+            return <Query key={message.id} text={message.text} onClick={() => addMessage(message.id)} canChange={false}/>
           } else if (message.role === 'assistant') {
-            return <Response key={message.id} text = {message.content || message.text} />
+            return <Response key={message.id} text = {message.text} />
           } else {
             return
           }
         }
         )}
-        {latest.role === 'user' ? (
+        {console.log("LATEST: ", latest)}
+        {latest.role === 'assistant' || latest.length === 0 ? (
           messages.length === 0
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
           : <Query text='add query here' onClick={(message) => newBranch(latest.id, true, message)} canChange={true} />
