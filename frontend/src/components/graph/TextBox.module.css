@@ -38,10 +38,9 @@
 } */
 
 /* TextBox.module.css */
-.textbox {
+/* .textbox {
     padding: 10px;
     background-color: lightblue;
-    /* border: 1px solid blue; */
     min-height: 40px;
     max-height: 100px;
     border-radius: 5px;
@@ -52,26 +51,66 @@
   .query {
     padding: 10px;
     background-color: lightblue;
-    /* border: 1px solid blue; */
     min-height: 40px;
     max-height: 100px;
     min-width: 90px;
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
-    /* border: 1px solid blue; */
   }
   
   .response {
     padding: 10px;
     background-color: lightyellow;
-    /* border: 1px solid blue; */
     min-height: 40px;
     max-height: 100px;
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
-    /* border: 1px solid green; */
-  }
-  
+  } */
+
+  .textbox {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.query {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.response {
+    padding: 10px;
+    background-color: lightyellow;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+
+
   
