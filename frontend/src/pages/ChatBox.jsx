@@ -29,7 +29,9 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
           messages.length === 0
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
           : <Query text='add query here' onClick={(message) => newBranch(latest.id, true, message)} canChange={true} />
-        ) : null
+        ) : currentLatest.role === 'user'
+          ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
+          : null
         }
 
         {/* need to accept input for the above thing to work */}

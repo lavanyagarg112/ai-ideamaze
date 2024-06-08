@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classes from './Chat.module.css';
 
-const Query = ({ text, onClick, canChange }) => {
+const Query = ({ text, onClick, canChange, shouldAdd = false, addMessage = undefined }) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
@@ -35,21 +35,28 @@ const Query = ({ text, onClick, canChange }) => {
   }, [inputValue]);
 
   return (
-    <div className={classes.query}>
-      {!canChange && <div onClick={onClick}>{text}</div>}
-      {canChange && (
-        <div>
-          <textarea
-            ref={inputRef}
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Type your query..."
-            className={classes.input}
-          />
-          <button onClick={handleSubmit} className={classes.button}>Submit</button>
-        </div>
+    <div>
+      <div className={classes.query}>
+        {!canChange && !shouldAdd && <div onClick={onClick}>{text}</div>}
+        {canChange && !shouldAdd && (
+          <div>
+            <textarea
+              ref={inputRef}
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="Type your query..."
+              className={classes.input}
+            />
+            <button onClick={handleSubmit} className={classes.button}>Submit</button>
+          </div>
+        )}
+      </div>
+      {shouldAdd && (
+        <button onClick={addMessage} className={classes.button}>{text}</button>
       )}
+
     </div>
+    
   );
 };
 
