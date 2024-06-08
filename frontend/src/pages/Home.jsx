@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { ReactFlowProvider } from 'reactflow';
 
 import classes from './Home.module.css'
 
@@ -115,6 +116,7 @@ const Home = () => {
         await alert(`get next branch for ${id}`) // parent id
         // API end point for getting next branch and the whole thing to send it back to chatbox
         setMessages([DUMMY_DATA])
+        setNewMessage(DUMMY_DATA[1])
     }
 
     // right now i am sending in an array of array of messages so i have to do messages[0].
@@ -123,7 +125,10 @@ const Home = () => {
   return (
     <div className={classes.container}>
         <div className={classes.maincontent}>
-            <Maze onClick={(id) => handleClick(id)} addNode={newMessage} messages={messages} />
+            <ReactFlowProvider>
+                <Maze onClick={(id) => handleClick(id)} addNode={newMessage} allMessages={messages} />
+            </ReactFlowProvider>
+            
         </div>
         <div className={classes.scrollablecontainer}>
             <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} />
