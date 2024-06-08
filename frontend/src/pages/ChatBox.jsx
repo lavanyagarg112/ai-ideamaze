@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Query from '../components/chat/QueryChat'
 import Response from '../components/chat/ResponseChat'
@@ -8,6 +8,31 @@ import classes from './Home.module.css'
 const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
 
   const currentLatest = messages[messages.length - 1]
+  const [children, setChildren] = useState(false)
+
+  const checkChildren = async (checkid) => {
+    const data = {
+      username: userName,
+      id: checkid
+    }
+    const responseFetch = await fetch('https://ai-ideamaze.onrender.com/check-children', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+    const responseMessage = await responseFetch.json()
+    console.log('exists:', !responseMessage.exists)
+    setChildren(responseMessage.exists)
+
+  }
+
+  useEffect(() => {
+    currentLatest && checkChildren(currentLatest.id);
+  }, [currentLatest]);
+
+  
 
   return (
     <div className={classes.scrollablecontent}>
@@ -24,17 +49,15 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
           }
         }
         )}
-        {console.log("LATEST: ", latest)}
-        {latest && currentLatest && (latest.id === currentLatest.id) || latest.length === 0  ? (
+        {console.log("LATEST: ", currentLatest)}
+        {(currentLatest && !children) || latest.length === 0  ? (
           messages.length === 0
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
-          : <Query text='add query here' onClick={(message) => newBranch(latest.id, true, message)} canChange={true} />
-        ) : currentLatest.role === 'user'
+          : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} />
+        ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
           ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
           : null
         }
-
-        {/* need to accept input for the above thing to work */}
         
 
       </div>
