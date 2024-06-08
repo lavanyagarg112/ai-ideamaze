@@ -43,7 +43,7 @@ const Home = () => {
 
             const newUser = assignUsernameToUser();
             setUser(newUser.username);
-            console.log(`Assigned username to user: ${user}`);
+            console.log(`Assigned username to user: ${newUser.username}`);
         });
     }, []);
 
