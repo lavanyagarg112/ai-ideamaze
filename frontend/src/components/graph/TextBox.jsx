@@ -32,7 +32,7 @@ const TextBox = ({ id, text, onClick, type }) => {
         }
         onClick={handleClick}
       >
-        {text.length > maxLength ? `${text.substring(0, maxLength)}...` : text}
+        {text && text.length > maxLength ? `${text.substring(0, maxLength)}...` : text}
       </div>
     </Draggable>
   );

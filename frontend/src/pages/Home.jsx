@@ -16,6 +16,7 @@ const Home = () => {
     const [user, setUser] = useState('username');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState([]);
+    const [chatMessages, setChatMessages] = useState([]);
 
     useEffect(() => {
         // Step 2: Use the fetched word list
@@ -97,21 +98,6 @@ const Home = () => {
         },
     ]
 
-    const DUMMY_DATA2 = [
-        {
-            id: 12,
-            parent_id: 11,
-            role: 'user',
-            text: 'This is a new query'
-        },
-        {
-            id: 13,
-            parent_id: 12,
-            role: 'assistant',
-            text: 'This is my new message'
-        }
-    ]
-
     const handleClick = async (id) => {
         // API endpoint here for getting all messages
         await alert(`chatid ${id}`)
@@ -153,6 +139,7 @@ const Home = () => {
             console.log("MY RESPONSE:", responseMessage.message)
             
             setMessages([...messages, messageFormat, responseMessage])
+            setChatMessages([...messages, messageFormat, responseMessage])
             setNewMessage(responseMessage)
             console.log('added message:', messages)
         }
@@ -170,7 +157,7 @@ const Home = () => {
                 </ReactFlowProvider>
             </div>
             <div className={classes.scrollablecontainer}>
-                <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} 
+                <ChatBox messages={chatMessages} addMessage={(parentId) => addMessage(parentId)} 
                     newBranch={(id, getMessage, message) => newBranch(id, getMessage, message)} userName={user}
                     latest={newMessage} />
             </div>
