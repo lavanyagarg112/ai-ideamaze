@@ -15,7 +15,6 @@ import re
 load_dotenv()
 
 client = OpenAI()
-# Create a new client and connect to the server
 
 r = redis.Redis(
     host='redis-13375.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
@@ -30,6 +29,11 @@ def generate_model_random_key(length=10):
     return re.sub(r'[\\/]', '', random_base64)
 
 class Message(BaseModel):
+    id: str
+    role: str
+    content: str
+
+class openAIMessages(BaseModel):
     role: str
     content: str
 
@@ -37,8 +41,6 @@ class Choices(Enum):
     user = 'user'
     system = 'system'
     assistant = 'assistant'
-
-
 
 class DataValue(BaseModel):
     type: Choices
@@ -63,7 +65,6 @@ class ReturnValue(BaseModel):
 class GetHistory(BaseModel):
     username: str
     id: str
-    
 
 app = FastAPI()
 app.add_middleware(
@@ -74,7 +75,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas. Always give one idea and one idea only. Never give more than one idea")
+def convert_to_openai_messages(messages: List[Message]) -> List[openAIMessages]:
+    return [openAIMessages(role=msg.role, content=msg.content) for msg in messages]
+
+default_message: Message = Message(id="0", role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas. Always give one idea and one idea only. Never give more than one idea")
 
 default_json_value = DataValue(type=Choices.system, messages=[default_message], parent=None, children=[])
 
@@ -101,13 +105,13 @@ async def message(req: MessageRequest):
     parent_data = DataValue(**json.loads(parent_data_raw))
     print("parent_data is", parent_data)
     parent_messages = parent_data.messages
-    new_message = Message(role="user", content=query)
+    userRandomValue = generate_model_random_key()
+    new_message = Message(id=userRandomValue, role="user", content=query)
 
     # Make user block
-    user_messages = parent_messages + [new_message.model_dump()]
+    user_messages = parent_messages + [new_message]
     user_parent = parent_key
     userBlock = DataValue(type=Choices.user, messages=user_messages, parent=user_parent, children=[])
-    userRandomValue = generate_model_random_key()
     userKey = f'{username}/{userRandomValue}'
     # set user_key as child of parent
     parent_data.children.append(userKey)
@@ -116,13 +120,16 @@ async def message(req: MessageRequest):
     
     # make GPTresponse block
     new_messages = user_messages
-    chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=new_messages)
+    print("the type is", type(new_messages[0]))
+
+    send_to_openAI_format = list(convert_to_openai_messages(new_messages))
+    chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=send_to_openAI_format)
     model_reply = chat.choices[0].message.content
-   
-    new_messages.append(Message(role="assistant", content=model_reply).model_dump())
+
+    model_random_key = generate_model_random_key()
+    new_messages.append(Message(id=model_random_key, role="assistant", content=model_reply))
    
     model_response_block = DataValue(type=Choices.assistant, messages=new_messages, parent=userKey, children=[])
-    model_random_key = generate_model_random_key()
     model_response_key = f'{username}/{model_random_key}'
 
     print("model block key is", model_response_key)
@@ -145,7 +152,7 @@ async def history(input: GetHistory):
     print(key_exists)
     print("username is", username)
     print("id is", id)
-    if (key_exists):
+    if key_exists:
         print("found key!")
         value_raw= r.get(key)
         formatted_value = DataValue(**json.loads(value_raw))
@@ -156,4 +163,4 @@ async def history(input: GetHistory):
         return output
     
     else:
-        raise HTTPException(status_code=404, detail="Key not found") 
+        raise HTTPException(status_code=404, detail="Key not found")
