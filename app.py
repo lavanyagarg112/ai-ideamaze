@@ -79,6 +79,9 @@ class SiblingRequest(BaseModel):
     username: str
     user_query_id: str
 
+class RemoveUser(BaseModel):
+    username: str
+
 GPT_3 = "gpt-3.5-turbo"
 
 app = FastAPI()
@@ -280,3 +283,14 @@ async def checkChildren(input: GetHistory):
     else:
         raise HTTPException(404, "No such key!")
  
+
+@app.post('/remove-user')
+async def removeUser(input: RemoveUser):
+    username = input.username
+    pattern = f"{username}/*"
+    cursor = '0'
+    while cursor != 0:
+        cursor, keys = r.scan(cursor=cursor, match=pattern, count=1000)
+        if keys:
+            r.delete(*keys)
+    print("deleted all keys with ", username)
