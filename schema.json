@@ -1,0 +1,18 @@
+[
+    {
+        "endpoint": "send-message", 
+        "type": "POST", 
+        "expects" : {
+            "username": "pradyu", 
+            "old_id": "0", 
+            "query": "str"
+        }, 
+
+        "returns": {
+            "id": "1", 
+            "parent_id": "0", 
+            "role": "response", 
+            "text": "this is the GPT response"
+        }
+    }
+]
