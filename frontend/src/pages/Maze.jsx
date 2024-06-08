@@ -11,13 +11,21 @@ const horizontalSpacing = 200;
 const verticalSpacing = 100;
 
 const buildNodesAndEdges = (messages, onClick) => {
+  
   const nodes = [];
   const edges = [];
+  let initId = 0;
+  let flag = false;
 
   const messageMap = {};
 
   messages.forEach(message => {
-    messageMap[message.id] = { ...message, children: [] };
+    if (!flag) {
+      initId = message.id
+      flag = true
+    }
+    
+    return messageMap[message.id] = { ...message, children: [] };
   });
 
   messages.forEach(message => {
@@ -26,7 +34,10 @@ const buildNodesAndEdges = (messages, onClick) => {
     }
   });
 
+  console.log('messageMap:', messageMap)
+
   const positionNodes = (node, x = 0, y = 0) => {
+    console.log("node:", node)
     nodes.push({
       id: `${node.id}`,
       data: { label: <TextBox text={node.text} type={node.role} id={node.id} onClick={onClick} /> },
@@ -36,7 +47,7 @@ const buildNodesAndEdges = (messages, onClick) => {
 
     let childX = x - ((node.children.length - 1) * (nodeWidth + horizontalSpacing)) / 2;
     let childY = y + nodeHeight + verticalSpacing;
-
+    console.log('children: ', node.children)
     node.children.forEach((child) => {
       edges.push({
         id: `e${node.id}-${child.id}`,
@@ -49,41 +60,55 @@ const buildNodesAndEdges = (messages, onClick) => {
     });
   };
 
-  positionNodes(messageMap[0]);
-
+  positionNodes(messageMap[initId]);
+  console.log("final nodes: ", nodes)
+  console.log("final edges: ", edges)
   return { nodes, edges };
 };
 
-const Maze = ({ onClick, addNode }) => {
+const Maze = ({ onClick, addNode, allMessages }) => {
+  console.log("allmessages:", allMessages.length)
   const [messages, setMessages] = useState([
     {
       id: 0,
       parent_id: 0,
       role: 'user',
-      text: 'This is my first query'
+      text: 'Start typing on the right to begin!'
     }
   ]);
+
+  useEffect(() => {
+    if (allMessages.length !== 0) {
+      setMessages(allMessages);
+    }
+  }, [allMessages]);
+  console.log("messages in maze: ", messages)
+
+  console.log("BUILDING:", buildNodesAndEdges(messages, onClick))
 
   const { nodes: initialNodes, edges: initialEdges } = buildNodesAndEdges(messages, onClick);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
 
-  useEffect(() => {
-    if (addNode) {
-      setMessages(prevMessages => {
-        const updatedMessages = [...prevMessages, addNode];
-        const { nodes, edges } = buildNodesAndEdges(updatedMessages, onClick);
-        setNodes(nodes);
-        setEdges(edges);
-        return updatedMessages;
-      });
-    }
-  }, [addNode, setNodes, setEdges]);
+  // useEffect(() => {
+  //   if (addNode) {
+  //     setMessages(prevMessages => {
+  //       const updatedMessages = [...prevMessages, addNode];
+  //       const { nodes, edges } = buildNodesAndEdges(updatedMessages, onClick);
+  //       setNodes(nodes);
+  //       setEdges(edges);
+  //       return updatedMessages;
+  //     });
+  //   }
+  // }, [addNode, setNodes, setEdges]);
 
   useEffect(() => {
     fitView();
   }, [nodes, edges, fitView]);
+
+  console.log("nodes outside: ", nodes)
+  console.log("edges outside: ", edges)
 
   return (
     <ReactFlowProvider>

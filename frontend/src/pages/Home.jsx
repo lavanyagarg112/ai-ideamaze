@@ -157,7 +157,7 @@ const Home = () => {
         <div className={classes.container}>
             <div className={classes.maincontent}>
                 <ReactFlowProvider>
-                    <Maze onClick={(id) => handleClick(id)} addNode={newMessage} />
+                    <Maze onClick={(id) => handleClick(id)} addNode={newMessage} allMessages={messages} />
                 </ReactFlowProvider>
             </div>
             <div className={classes.scrollablecontainer}>
