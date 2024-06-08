@@ -1,6 +1,7 @@
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from enum import Enum
 import json
 import os
@@ -58,6 +59,14 @@ class ReturnValue(BaseModel):
     text: str
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas")
 
