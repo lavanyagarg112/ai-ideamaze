@@ -34,10 +34,8 @@ const buildNodesAndEdges = (messages, onClick) => {
     }
   });
 
-  console.log('messageMap:', messageMap)
-
   const positionNodes = (node, x = 0, y = 0) => {
-    console.log("node:", node)
+    // console.log("node:", node)
     nodes.push({
       id: `${node.id}`,
       data: { label: <TextBox text={node.text} type={node.role} id={node.id} onClick={onClick} /> },
@@ -47,7 +45,7 @@ const buildNodesAndEdges = (messages, onClick) => {
 
     let childX = x - ((node.children.length - 1) * (nodeWidth + horizontalSpacing)) / 2;
     let childY = y + nodeHeight + verticalSpacing;
-    console.log('children: ', node.children)
+    // console.log('children: ', node.children)
     node.children.forEach((child) => {
       edges.push({
         id: `e${node.id}-${child.id}`,
@@ -61,13 +59,13 @@ const buildNodesAndEdges = (messages, onClick) => {
   };
 
   positionNodes(messageMap[initId]);
-  console.log("final nodes: ", nodes)
-  console.log("final edges: ", edges)
+  // console.log("final nodes: ", nodes)
+  // console.log("final edges: ", edges)
   return { nodes, edges };
 };
 
 const Maze = ({ onClick, addNode, allMessages }) => {
-  console.log("allmessages:", allMessages.length)
+  // console.log("allmessages:", allMessages.length)
   const [messages, setMessages] = useState([
     {
       id: 0,
@@ -82,9 +80,9 @@ const Maze = ({ onClick, addNode, allMessages }) => {
       setMessages(allMessages);
     }
   }, [allMessages]);
-  console.log("messages in maze: ", messages)
+  // console.log("messages in maze: ", messages)
 
-  console.log("BUILDING:", buildNodesAndEdges(messages, onClick))
+  // console.log("BUILDING:", buildNodesAndEdges(messages, onClick))
 
   const { nodes: initialNodes, edges: initialEdges } = buildNodesAndEdges(messages, onClick);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -114,8 +112,8 @@ const Maze = ({ onClick, addNode, allMessages }) => {
     fitView();
   }, [nodes, edges, fitView]);
 
-  console.log("nodes outside: ", nodes)
-  console.log("edges outside: ", edges)
+  // console.log("nodes outside: ", nodes)
+  // console.log("edges outside: ", edges)
 
   return (
     <ReactFlowProvider>

@@ -127,24 +127,33 @@ const Home = () => {
     }
 
     const newBranch = async (newparentid, getMessage, message) => {
-        await alert(`get next branch for ${newparentid}`) // parent id
+        alert(`get next branch for ${newparentid}`) // parent id
         // API end point for getting next branch and the whole thing to send it back to chatbox
         if (getMessage) {
+            const data = {
+                username: user,
+                old_id: newparentid,
+                query: message,
+            }
             // send api
+            const responseFetch = await fetch('https://ai-ideamaze.onrender.com/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const responseMessage = await responseFetch.json()
             const messageFormat = {
-                id: newparentid+'1',
+                id: responseMessage.parent_id,
                 parent_id: newparentid,
                 role: 'user',
                 text: message
             }
-            const dummyResponse = {
-                id: newparentid + '12',
-                parent_id: newparentid+'1',
-                role: 'assistant',
-                text: message + 'response'
-            }
-            setMessages([...messages, messageFormat, dummyResponse])
-            setNewMessage(dummyResponse)
+            console.log("MY RESPONSE:", responseMessage.message)
+            
+            setMessages([...messages, messageFormat, responseMessage])
+            setNewMessage(responseMessage)
             console.log('added message:', messages)
         }
 
