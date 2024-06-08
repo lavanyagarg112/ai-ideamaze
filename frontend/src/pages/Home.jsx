@@ -70,23 +70,28 @@ const Home = () => {
     }
 
     const addMessage = async (parentId) => {
-        await alert(`add a new branch for parent ${parentId}`)
-        
-        const DUMMYDATA = {
-            id: `${parentId}1`,
-            parent_id: parentId,
-            role: 'assistant',
-            text: 'THIS IS MY DUMMY MESSAGE',
+
+        const data = {
+            username: user,
+            user_query_id: parentId,
         }
 
-        setMessages([...messages, DUMMYDATA])
-        setNewMessage(DUMMYDATA)
-        setChatMessages([...chatMessages, DUMMYDATA])
+        const responseFetch = await fetch('https://ai-ideamaze.onrender.com/make-sibling', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        const responseMessage = await responseFetch.json()
+
+        setMessages([...messages, responseMessage])
+        setNewMessage(responseMessage)
+        setChatMessages([...chatMessages, responseMessage])
     }
 
     const newBranch = async (newparentid, getMessage, message) => {
-        alert(`get next branch for ${newparentid}`) // parent id
-        // API end point for getting next branch and the whole thing to send it back to chatbox
+
         if (getMessage) {
             const data = {
                 username: user,
