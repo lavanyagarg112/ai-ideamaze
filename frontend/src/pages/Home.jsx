@@ -98,11 +98,25 @@ const Home = () => {
         },
     ]
 
-    const handleClick = async (id) => {
-        // API endpoint here for getting all messages
-        await alert(`chatid ${id}`)
-        // send user
-        setMessages(DUMMY_DATA)
+    const handleClick = async (newid) => {
+        if (newid !== '-1'){
+            const data = {
+                username: user,
+                id: newid,
+            }
+            const responseFetch = await fetch('https://ai-ideamaze.onrender.com/get-history', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const responseMessage = await responseFetch.json()
+            console.log("MY RESPONSE:", responseMessage.Data)
+            setChatMessages(responseMessage.Data)
+
+        }
+        
     }
 
     const addMessage = async (parentId) => {

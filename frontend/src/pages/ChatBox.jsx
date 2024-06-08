@@ -15,8 +15,10 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
         {messages.length === 0 ? messages : messages.map((message) => {
           if (message.role === 'user') {
             return <Query key={message.id} text={message.text} onClick={() => addMessage(message.id)} canChange={false}/>
-          } else {
+          } else if (message.role === 'assistant') {
             return <Response key={message.id} text = {message.text} />
+          } else {
+            return
           }
         }
         )}

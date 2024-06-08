@@ -68,8 +68,8 @@ const Maze = ({ onClick, addNode, allMessages }) => {
   // console.log("allmessages:", allMessages.length)
   const [messages, setMessages] = useState([
     {
-      id: 0,
-      parent_id: 0,
+      id: '-1',
+      parent_id: '-1',
       role: 'user',
       text: 'Start typing on the right to begin!'
     }
