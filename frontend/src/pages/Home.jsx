@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ReactFlowProvider } from 'reactflow';
 
 import classes from './Home.module.css'
@@ -6,10 +6,45 @@ import classes from './Home.module.css'
 import Maze from './Maze'
 import ChatBox from './ChatBox'
 
-const Home = () => {
+async function fetchWordList() {
+    const response = await fetch('https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt');
+    const text = await response.text();
+    return text.split('\n');
+}
 
-    const [messages, setMessages] = useState([])
-    const [newMessage, setNewMessage] = useState([])
+const Home = () => {
+    const [user, setUser] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState([]);
+
+    useEffect(() => {
+        // Step 2: Use the fetched word list
+        fetchWordList().then(dictionary => {
+            // Function to get a random word from the dictionary
+            function getRandomWord() {
+                const randomIndex = Math.floor(Math.random() * dictionary.length);
+                return dictionary[randomIndex].trim();
+            }
+
+            // Function to generate a username with three random words
+            function generateUsername() {
+                const word1 = getRandomWord();
+                const word2 = getRandomWord();
+                const word3 = getRandomWord();
+                return `${word1}-${word2}-${word3}`;
+            }
+
+            // Function to assign the generated username to a user
+            function assignUsernameToUser() {
+                const username = generateUsername();
+                return { username };
+            }
+
+            const newUser = assignUsernameToUser();
+            setUser(newUser);
+            console.log(`Assigned username to user: ${newUser.username}`);
+        });
+    }, []);
 
     const DUMMY_DATA = [
         {
@@ -101,6 +136,7 @@ const Home = () => {
     const handleClick = async (id) => {
         // API endpoint here for getting all messages
         await alert(`chatid ${id}`)
+        // send user
         setMessages(DUMMY_DATA)
     }
 
@@ -121,19 +157,18 @@ const Home = () => {
     // right now i am sending in an array of array of messages so i have to do messages[0].
     // see if i can fix this
 
-  return (
-    <div className={classes.container}>
-        <div className={classes.maincontent}>
-            <ReactFlowProvider>
-                <Maze onClick={(id) => handleClick(id)} addNode={newMessage} allMessages={messages} />
-            </ReactFlowProvider>
-            
+    return (
+        <div className={classes.container}>
+            <div className={classes.maincontent}>
+                <ReactFlowProvider>
+                    <Maze onClick={(id) => handleClick(id)} addNode={newMessage} allMessages={messages} />
+                </ReactFlowProvider>
+            </div>
+            <div className={classes.scrollablecontainer}>
+                <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} />
+            </div>
         </div>
-        <div className={classes.scrollablecontainer}>
-            <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} />
-        </div>
-    </div>
-  )
+    )
 }
 
 export default Home
