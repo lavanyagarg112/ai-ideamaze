@@ -82,29 +82,26 @@ async def message(req: MessageRequest):
             raise HTTPException(500, detail="Man something went wrong!")
         
         else:
-            parent_data = data[parent_key]
+            parent_data = DataValue(**data[parent_key])
             print(parent_data)
             
-            parent_messages = parent_data["messages"]
-            new_message = {
-                "role": "user", 
-                "content": query
-            }
+            parent_messages = parent_data.messages
+            new_message = Message(role="user", content=query)
             
-            new_messages = parent_messages + [new_message]
+            new_messages = parent_messages + [new_message.model_dump()]
             print(new_messages)
             
             chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=new_messages)
             model_reply = chat.choices[0].message.content
             print(model_reply)
             
-            new_messages.append({"role": "assistant", "content": model_reply})
+            new_messages.append(Message(role="assistant", content=model_reply).model_dump())
             
             new_value = DataValue(messages=new_messages, parent = parent_key, children=[])
             random_key = generate_random_key()
             new_key = f'{username}/{random_key}'
             data[new_key] = new_value.model_dump()
-            parent_data['children'].append(new_key)
+            parent_data.children.append(new_key)
             with open(DATA_FILE, 'w') as file: json.dump(data, file)
             send_to_user = ReturnValue(id=random_key, parent_id=old_id, role="user", text=model_reply)
             return send_to_user.model_dump()
