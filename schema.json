@@ -1,0 +1,11 @@
+[
+    {
+        "endpoint": "send-message", 
+        "type": "POST", 
+        "expects" : {
+            "username": "pradyu", 
+            "old_id": "0", 
+            "query": "str"
+        }
+    }
+]
