@@ -86,7 +86,7 @@ async def message(req: MessageRequest):
     new_value = DataValue(messages=new_messages, parent=parent_key, children=[])
     random_key = generate_random_key()
     new_key = f'{username}/{random_key}'
-   
+    print(new_value)
     r.set(new_key, json.dumps(new_value.model_dump()))
    
     parent_data.children.append(new_key)
