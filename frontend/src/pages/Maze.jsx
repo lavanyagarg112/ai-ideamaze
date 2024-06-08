@@ -89,6 +89,13 @@ const Maze = ({ onClick, addNode, allMessages }) => {
   const { nodes: initialNodes, edges: initialEdges } = buildNodesAndEdges(messages, onClick);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  useEffect(() => {
+    const { nodes: newNodes, edges: newEdges } = buildNodesAndEdges(messages, onClick);
+    setNodes(newNodes);
+    setEdges(newEdges);
+  }, [messages, onClick, setNodes, setEdges]);
+
   const { fitView } = useReactFlow();
 
   // useEffect(() => {
