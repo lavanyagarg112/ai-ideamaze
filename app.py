@@ -10,8 +10,16 @@ from dotenv import load_dotenv
 load_dotenv()
 import secrets
 import base64
+import redis
+
 
 client = OpenAI()
+# Create a new client and connect to the server
+
+r = redis.Redis(
+  host='redis-13375.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+  port=13375,
+  password=os.getenv('REDIS_PASSWORD'))
 
 
 def generate_random_key(length=10):
@@ -105,5 +113,3 @@ async def message(req: MessageRequest):
             with open(DATA_FILE, 'w') as file: json.dump(data, file)
             send_to_user = ReturnValue(id=random_key, parent_id=old_id, role="user", text=model_reply)
             return send_to_user.model_dump()
-                
-
