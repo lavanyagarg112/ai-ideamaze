@@ -162,7 +162,7 @@ const Home = () => {
             <div className={classes.scrollablecontainer}>
                 <ChatBox messages={chatMessages} addMessage={(parentId) => addMessage(parentId)} 
                     newBranch={(id, getMessage, message) => newBranch(id, getMessage, message)} userName={user}
-                    latest={newMessage} />
+                    latest={newMessage} handleClick={(id) => handleClick(id)} />
             </div>
         </div>
     )
