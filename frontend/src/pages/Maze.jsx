@@ -10,7 +10,7 @@ const nodeHeight = 50;
 const horizontalSpacing = 200;
 const verticalSpacing = 100;
 
-const buildNodesAndEdges = (messages) => {
+const buildNodesAndEdges = (messages, onClick) => {
   const nodes = [];
   const edges = [];
 
@@ -29,7 +29,7 @@ const buildNodesAndEdges = (messages) => {
   const positionNodes = (node, x = 0, y = 0) => {
     nodes.push({
       id: `${node.id}`,
-      data: { label: <TextBox text={node.text} type={node.role} id={node.id} /> },
+      data: { label: <TextBox text={node.text} type={node.role} id={node.id} onClick={onClick} /> },
       position: { x, y },
       type: 'default',
     });
@@ -59,12 +59,12 @@ const Maze = ({ onClick, addNode, allMessages }) => {
     {
       id: 0,
       parent_id: 0,
-      role: 'query',
+      role: 'user',
       text: 'This is my first query'
     }
   ]);
 
-  const { nodes: initialNodes, edges: initialEdges } = buildNodesAndEdges(messages);
+  const { nodes: initialNodes, edges: initialEdges } = buildNodesAndEdges(messages, onClick);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
@@ -85,12 +85,6 @@ const Maze = ({ onClick, addNode, allMessages }) => {
     fitView();
   }, [nodes, edges, fitView]);
 
-  const handleNodeClick = useCallback((event, node) => {
-    if (typeof onClick === 'function') {
-      onClick(node.id);
-    }
-  }, [onClick]);
-
   return (
     <ReactFlowProvider>
       <div style={{ height: '95vh', width: '100%' }}>
@@ -99,7 +93,6 @@ const Maze = ({ onClick, addNode, allMessages }) => {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
-          onNodeClick={handleNodeClick}
           fitView
         >
           <MiniMap />

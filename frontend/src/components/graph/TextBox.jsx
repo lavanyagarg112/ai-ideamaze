@@ -26,7 +26,7 @@ const TextBox = ({ id, text, onClick, type }) => {
     >
       <div
         className={
-          type === 'query' ? classes.query : type === 'response' ? classes.response : type === 'system' ? classes.textbox : classes.textbox
+          type === 'user' ? classes.query : type === 'assistant' ? classes.response : type === 'system' ? classes.textbox : classes.textbox
         }
         onClick={handleClick}
       >

@@ -15,85 +15,85 @@ const Home = () => {
         {
             id: 0,
             parent_id: 0,
-            role: 'query',
+            role: 'user',
             text: 'This is my first query'
         },
         {
             id: 1,
             parent_id: 0,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my message'
         },
         {
             id: 2,
             parent_id: 1,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 3,
             parent_id: 2,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         },
         {
             id: 4,
             parent_id: 3,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 5,
             parent_id: 4,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         },
         {
             id: 6,
             parent_id: 5,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 7,
             parent_id: 6,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         },
         {
             id: 8,
             parent_id: 7,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 9,
             parent_id: 8,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         },
         {
             id: 10,
             parent_id: 9,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 11,
             parent_id: 10,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         },
         {
             id: 12,
             parent_id: 11,
-            role: 'query',
+            role: 'user',
             text: 'This is a new query'
         },
         {
             id: 13,
             parent_id: 12,
-            role: 'response',
+            role: 'assistant',
             text: 'This is my new message'
         }
     ]
