@@ -114,9 +114,6 @@ const Home = () => {
             const responseMessage = await responseFetch.json()
             console.log("MY RESPONSE:", responseMessage.Data)
             setChatMessages(responseMessage.Data)
-            if (responseMessage.Data) {
-                setNewMessage(responseMessage.Data[responseMessage.Data.length - 1])
-            }
             
 
         }
@@ -157,7 +154,7 @@ const Home = () => {
             console.log("MY RESPONSE:", responseMessage.message)
             
             setMessages([...messages, messageFormat, responseMessage])
-            setChatMessages([...messages, messageFormat, responseMessage])
+            setChatMessages([...chatMessages, messageFormat, responseMessage])
             setNewMessage(responseMessage)
             console.log('added message:', messages)
         }

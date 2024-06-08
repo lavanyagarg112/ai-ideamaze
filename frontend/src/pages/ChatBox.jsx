@@ -7,6 +7,8 @@ import classes from './Home.module.css'
 
 const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
 
+  const currentLatest = messages[messages.length - 1]
+
   return (
     <div className={classes.scrollablecontent}>
       <Query text={`Username: ${userName}`} onClick={() => newBranch('0', false, '')} canChange={false} />
@@ -23,7 +25,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
         }
         )}
         {console.log("LATEST: ", latest)}
-        {latest.role === 'assistant' || latest.length === 0 ? (
+        {latest && currentLatest && (latest.id === currentLatest.id) || latest.length === 0  ? (
           messages.length === 0
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
           : <Query text='add query here' onClick={(message) => newBranch(latest.id, true, message)} canChange={true} />
