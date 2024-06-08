@@ -55,6 +55,7 @@ Throughout this project, the following resources were quite helpful as we were n
 
 Some of the future scope for our project includes but is not limited to:
 - Personalised prompts for new ideas in order to get more targeted ideas
+- Mobile friendly
 - Collaborative sessions for teams to brainstorm together
 
 ## User Manual
