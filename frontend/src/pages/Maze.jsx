@@ -73,7 +73,7 @@ const Maze = ({ onClick, addNode, allMessages }) => {
     if (addNode) {
       setMessages(prevMessages => {
         const updatedMessages = [...prevMessages, addNode];
-        const { nodes, edges } = buildNodesAndEdges(updatedMessages);
+        const { nodes, edges } = buildNodesAndEdges(updatedMessages, onClick);
         setNodes(nodes);
         setEdges(edges);
         return updatedMessages;
