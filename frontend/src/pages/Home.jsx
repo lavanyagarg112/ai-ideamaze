@@ -18,6 +18,16 @@ const Home = () => {
     const [newMessage, setNewMessage] = useState([]);
     const [chatMessages, setChatMessages] = useState([]);
 
+    const removeUser = async (username) => {
+        const responseFetch = await fetch('https://ai-ideamaze.onrender.com/remove-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: user })
+        });
+    }
+
     useEffect(() => {
         // Step 2: Use the fetched word list
         fetchWordList().then(dictionary => {
@@ -45,7 +55,23 @@ const Home = () => {
             setUser(newUser.username);
             console.log(`Assigned username to user: ${newUser.username}`);
         });
+
     }, []);
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            removeUser(user);
+            event.returnValue = ''; // some browsers require this to show a confirmation dialog
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Cleanup event listener
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [user])
 
     const handleClick = async (newid) => {
         if (newid !== '-1'){

@@ -7,7 +7,7 @@ const Navigation = () => {
     const navigate = useNavigate();
 
     const handleReload = () => {
-        navigate(0)
+      navigate(0)
     }
 
   return (
