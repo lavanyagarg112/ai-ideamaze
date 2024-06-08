@@ -44,7 +44,16 @@ const Query = ({ text, onClick, canChange }) => {
   return (
 
     <div className={classes.query}>
-      {!canChange && <div onClick={onClick} >{text}</div>}
+      {!canChange && (
+        <div onClick={onClick}>
+          {text.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </div>
+      )}
       {canChange && (
         <div>
           <textarea

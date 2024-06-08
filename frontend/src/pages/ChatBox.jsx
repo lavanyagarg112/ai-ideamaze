@@ -36,6 +36,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
 
   return (
     <div className={classes.scrollablecontent}>
+      <Query text={'To create a new idea branch, click on the respective blue box, and then, click on "Generate New Idea" to explore a new idea branch. \n\nTo continue the conversation from any previous branch, click on the last box of that branch.'} onClick={() => newBranch('0', false, '')} canChange={false} />
       <Query text={`Username: ${userName}`} onClick={() => newBranch('0', false, '')} canChange={false} />
       <div>
         {console.log("messages: ", messages)}
