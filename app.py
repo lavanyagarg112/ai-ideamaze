@@ -1,33 +1,29 @@
-from typing import Optional
+from typing import Optional, List
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel
 import json
 import os
 from openai import OpenAI
-from filelock import FileLock
-from dotenv import load_dotenv
-load_dotenv()
 import secrets
 import base64
 import redis
+from dotenv import load_dotenv
 
+load_dotenv()
 
 client = OpenAI()
 # Create a new client and connect to the server
 
 r = redis.Redis(
-  host='redis-13375.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
-  port=13375,
-  password=os.getenv('REDIS_PASSWORD'))
-
+    host='redis-13375.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+    port=13375,
+    password=os.getenv('REDIS_PASSWORD')
+)
 
 def generate_random_key(length=10):
     random_bytes = secrets.token_bytes(length)
     random_base64 = base64.b64encode(random_bytes).decode('utf-8')[:length]
     return random_base64
-DATA_FILE = 'data.json'
-LOCK_FILE = 'data.lock'
 
 class Message(BaseModel):
     role: str
@@ -49,18 +45,7 @@ class ReturnValue(BaseModel):
     role: str
     text: str
 
-def initialize_data_file():
-    if not os.path.exists(DATA_FILE) or os.path.getsize(DATA_FILE) == 0:
-        with open(DATA_FILE, 'w') as file:
-            json.dump({}, file)
-
-
-
-
 app = FastAPI()
-initialize_data_file()
-
-
 
 default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas")
 
@@ -77,39 +62,35 @@ async def message(req: MessageRequest):
     query = req.query
     parent_key = f'{username}/{old_id}'
     print(username, old_id, query, parent_key)
-    initialize_data_file()
-    with FileLock(LOCK_FILE):
-        with open(DATA_FILE, 'r') as file:
-            data = json.load(file)
-            print("loaded")
-            
-        if f'{username}/0' not in data:
-            data[f'{username}/0'] = default_json_value.model_dump()
-        
-        if parent_key not in data:
-            raise HTTPException(500, detail="Man something went wrong!")
-        
-        else:
-            parent_data = DataValue(**data[parent_key])
-            print(parent_data)
-            
-            parent_messages = parent_data.messages
-            new_message = Message(role="user", content=query)
-            
-            new_messages = parent_messages + [new_message.model_dump()]
-            print(new_messages)
-            
-            chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=new_messages)
-            model_reply = chat.choices[0].message.content
-            print(model_reply)
-            
-            new_messages.append(Message(role="assistant", content=model_reply).model_dump())
-            
-            new_value = DataValue(messages=new_messages, parent = parent_key, children=[])
-            random_key = generate_random_key()
-            new_key = f'{username}/{random_key}'
-            data[new_key] = new_value.model_dump()
-            parent_data.children.append(new_key)
-            with open(DATA_FILE, 'w') as file: json.dump(data, file)
-            send_to_user = ReturnValue(id=random_key, parent_id=old_id, role="user", text=model_reply)
-            return send_to_user.model_dump()
+
+    parent_data_raw = r.get(parent_key)
+    if not parent_data_raw and username + '/0' not in r.keys():
+        r.set(username + '/0', json.dumps(default_json_value.model_dump()))
+        parent_data_raw = r.get(parent_key)
+   
+    if not parent_data_raw:
+        raise HTTPException(500, detail="Man something went wrong!")
+   
+    parent_data = DataValue(**json.loads(parent_data_raw))
+    print(parent_data)
+    parent_messages = parent_data.messages
+    new_message = Message(role="user", content=query)
+   
+    new_messages = parent_messages + [new_message.model_dump()]
+   
+    chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=new_messages)
+    model_reply = chat.choices[0].message.content
+   
+    new_messages.append(Message(role="assistant", content=model_reply).model_dump())
+   
+    new_value = DataValue(messages=new_messages, parent=parent_key, children=[])
+    random_key = generate_random_key()
+    new_key = f'{username}/{random_key}'
+   
+    r.set(new_key, json.dumps(new_value.model_dump()))
+   
+    parent_data.children.append(new_key)
+    r.set(parent_key, json.dumps(parent_data.model_dump()))
+   
+    send_to_user = ReturnValue(id=random_key, parent_id=old_id, role="user", text=model_reply)
+    return send_to_user.model_dump()
