@@ -136,11 +136,15 @@ async def message(req: MessageRequest):
 
 @app.post("/get-history")
 async def history(input: GetHistory):
+    print("running get history")
+    
     username = input.username
     id = input.id
     key = f'{username}/{id}'
     key_exists = bool(r.exists(key))
     print(key_exists)
+    print("username is", username)
+    print("id is", id)
     if (key_exists):
         print("found key!")
         value_raw= r.get(key)
