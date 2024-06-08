@@ -54,7 +54,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
         {(currentLatest && !children) || latest.length === 0  ? (
           messages.length === 0
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
-          : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} />
+          : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
         ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
           ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
           : null

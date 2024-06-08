@@ -114,6 +114,8 @@ const Home = () => {
         setMessages([...messages, responseMessage])
         setNewMessage(responseMessage)
         setChatMessages([...chatMessages, responseMessage])
+
+        responseMessage && handleClick(responseMessage.id)
     }
 
     const newBranch = async (newparentid, getMessage, message) => {

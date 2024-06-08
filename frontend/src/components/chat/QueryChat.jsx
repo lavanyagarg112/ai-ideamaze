@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classes from './Chat.module.css';
 
-const Query = ({ text, onClick, canChange }) => {
+const Query = ({ text, onClick, canChange, addNew=undefined }) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
@@ -65,6 +65,7 @@ const Query = ({ text, onClick, canChange }) => {
             className={classes.input}
           />
           <button onClick={handleSubmit} className={classes.button}>Submit</button>
+          {addNew && <button onClick={addNew} className={classes.button}>Give me a different idea instead</button>}
         </div>
       )}
     </div>
