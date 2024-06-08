@@ -287,6 +287,7 @@ async def checkChildren(input: GetHistory):
 @app.post('/remove-user')
 async def removeUser(input: RemoveUser):
     username = input.username
+    print("wanting to remove", username)
     pattern = f"{username}/*"
     cursor = '0'
     while cursor != 0:
