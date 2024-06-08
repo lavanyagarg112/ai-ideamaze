@@ -10,6 +10,7 @@ import secrets
 import base64
 import redis
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -19,13 +20,14 @@ client = OpenAI()
 r = redis.Redis(
     host='redis-13375.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com',
     port=13375,
-    password=os.getenv('REDIS_PASSWORD')
+    password=os.getenv('REDIS_PASSWORD'), 
+    decode_responses=True
 )
 
 def generate_model_random_key(length=10):
     random_bytes = secrets.token_bytes(length)
     random_base64 = base64.b64encode(random_bytes).decode('utf-8')[:length]
-    return random_base64
+    return re.sub(r'[\\/]', '', random_base64)
 
 class Message(BaseModel):
     role: str
@@ -58,6 +60,11 @@ class ReturnValue(BaseModel):
     role: str
     text: str
 
+class GetHistory(BaseModel):
+    username: str
+    id: str
+    
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -67,8 +74,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas")
+default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas. Always give one idea and one idea only. Never give more than one idea")
 
 default_json_value = DataValue(type=Choices.system, messages=[default_message], parent=None, children=[])
 
@@ -127,3 +133,23 @@ async def message(req: MessageRequest):
     r.set(parent_key,  json.dumps(parent_data.model_dump()))
     send_to_user = ReturnValue(id=model_random_key, parent_id=userKey, role="assistant", text=model_reply)
     return send_to_user.model_dump()
+
+@app.post("/get-history")
+async def history(input: GetHistory):
+    username = input.username
+    id = input.id
+    key = f'{username}/{id}'
+    key_exists = bool(r.exists(key))
+    print(key_exists)
+    if (key_exists):
+        print("found key!")
+        value_raw= r.get(key)
+        formatted_value = DataValue(**json.loads(value_raw))
+        messages_list = formatted_value.messages
+        output = {
+            'Data': messages_list
+        }
+        return output
+    
+    else:
+        raise HTTPException(status_code=404, detail="Key not found") 
