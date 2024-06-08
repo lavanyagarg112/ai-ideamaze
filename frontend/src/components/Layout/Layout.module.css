@@ -1,0 +1,71 @@
+/* white background */
+
+/* box: */
+/* query: light blue */
+/* gpt response: pale yellow  */
+/* black text */
+/* branch: dark grey */
+
+.main {
+    margin: 1rem;
+    /* width: 90%; */
+    /* max-width: 40rem; */
+  }
+  
+  .navigation {
+    background-color: blue;
+    height: 50px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .header {
+    font-size: xx-large;
+    color: white;
+    font-weight: 500;
+    margin-left: 3rem;
+    /* align-items: center; */
+  }
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navItem {
+    margin-right: 20px;
+  }
+  
+  .navLink {
+    text-decoration: none;
+    color: blue;
+  }
+  
+  .navButton {
+    background-color: lightyellow;
+    color: blue;
+    border: none;
+    padding: 10px 20px;
+    margin: 3rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .navButton:hover {
+    background-color: lightblue;
+  }
+  
+  .buttonLink {
+    text-decoration: none;
+    color: blue;
+  }
+  

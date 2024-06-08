@@ -1,0 +1,116 @@
+/* .textbox {
+    border: 1px solid #ccc;
+    background-color: lightblue;
+    width: 150px;
+    min-height: 40px;
+    max-height: 100px;
+    cursor: pointer;
+    color: black;
+    text-align: center;
+    padding: 10px;
+
+    margin-left: 30%;
+    margin-top: 20%;
+}
+
+.query {
+    border: 1px solid #ccc;
+    background-color: lightblue;
+    width: 150px;
+    min-height: 40px;
+    max-height: 100px;
+    cursor: pointer;
+    color: black;
+    text-align: center;
+    padding: 10px;
+}
+
+.response {
+    border: 1px solid #ccc;
+    background-color: lightyellow;
+    width: 150px;
+    min-height: 40px;
+    max-height: 100px;
+    cursor: pointer;
+    color: black;
+    text-align: center;
+    padding: 10px;
+} */
+
+/* TextBox.module.css */
+/* .textbox {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .query {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    min-width: 90px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .response {
+    padding: 10px;
+    background-color: lightyellow;
+    min-height: 40px;
+    max-height: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+  } */
+
+  .textbox {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.query {
+    padding: 10px;
+    background-color: lightblue;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.response {
+    padding: 10px;
+    background-color: lightyellow;
+    min-height: 40px;
+    max-height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+
+
+  
