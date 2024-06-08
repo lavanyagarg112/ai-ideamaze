@@ -33,7 +33,7 @@ class DataValue(BaseModel):
 class MessageRequest(BaseModel):
     username: str
     old_id: str
-    query: str  # This will be a JSON string
+    query: str
 
 class ReturnValue(BaseModel):
     id: str
