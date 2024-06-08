@@ -11,8 +11,8 @@ const ChatBox = ({messages, addMessage, newBranch}) => {
     <div className={classes.scrollablecontent}>
       <Query text='SYSTEM' onClick={() => newBranch(0, false)} />
       <div>
-        {console.log(messages)}
-        {messages.length === 0 ? messages : messages[0].map((message) => {
+        {console.log("messages: ", messages)}
+        {messages.length === 0 ? messages : messages.map((message) => {
           if (message.role === 'user') {
             return <Query key={message.id} text={message.text} onClick={() => newBranch(message.id, false)} /> // probably addMessage?
           } else {

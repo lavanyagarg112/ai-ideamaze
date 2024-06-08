@@ -101,8 +101,7 @@ const Home = () => {
     const handleClick = async (id) => {
         // API endpoint here for getting all messages
         await alert(`chatid ${id}`)
-        const DUMMY_DATA = []
-        setMessages([...messages, ...DUMMY_DATA])
+        setMessages(DUMMY_DATA)
     }
 
     const addMessage = async (parentId) => {
@@ -115,7 +114,7 @@ const Home = () => {
     const newBranch = async (id, getMessage) => {
         await alert(`get next branch for ${id}`) // parent id
         // API end point for getting next branch and the whole thing to send it back to chatbox
-        setMessages([DUMMY_DATA])
+        setMessages(DUMMY_DATA)
         setNewMessage(DUMMY_DATA[1])
     }
 
