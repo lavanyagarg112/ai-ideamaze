@@ -2,8 +2,8 @@
 # AI IdeaMaze
 
 ## Collaborators
-- Lavanya Garg
-- Pradyumna Shyama Prasad
+- [Lavanya Garg](https://github.com/lavanyagarg112)
+- [Pradyumna Shyama Prasad](https://github.com/pradyuprasad)
 
 You can find the deployed application here: [AI IdeaMaze](https://ai-ideamaze-k2h1.onrender.com/)
 
