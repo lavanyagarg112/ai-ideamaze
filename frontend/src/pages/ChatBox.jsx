@@ -5,11 +5,11 @@ import Response from '../components/chat/ResponseChat'
 
 import classes from './Home.module.css'
 
-const ChatBox = ({messages, addMessage, newBranch}) => {
+const ChatBox = ({messages, addMessage, newBranch, userName}) => {
 
   return (
     <div className={classes.scrollablecontent}>
-      <Query text='SYSTEM' onClick={() => newBranch(0, false)} />
+      <Query text={`Username: ${userName}`} onClick={() => newBranch(0, false)} />
       <div>
         {console.log("messages: ", messages)}
         {messages.length === 0 ? messages : messages.map((message) => {

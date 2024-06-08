@@ -13,7 +13,7 @@ async function fetchWordList() {
 }
 
 const Home = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState('username');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState([]);
 
@@ -41,8 +41,8 @@ const Home = () => {
             }
 
             const newUser = assignUsernameToUser();
-            setUser(newUser);
-            console.log(`Assigned username to user: ${newUser.username}`);
+            setUser(newUser.username);
+            console.log(`Assigned username to user: ${user}`);
         });
     }, []);
 
@@ -165,7 +165,7 @@ const Home = () => {
                 </ReactFlowProvider>
             </div>
             <div className={classes.scrollablecontainer}>
-                <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} />
+                <ChatBox messages={messages} addMessage={(parentId) => addMessage(parentId)} newBranch={(id) => newBranch(id)} userName={user} />
             </div>
         </div>
     )
