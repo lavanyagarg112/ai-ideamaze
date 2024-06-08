@@ -122,9 +122,17 @@ const Home = () => {
 
     const addMessage = async (parentId) => {
         await alert(`add a new branch for parent ${parentId}`)
-        // for when user sends query for additional ans
-        // get response
-        // send new message back to the maze, with parentid?
+        
+        const DUMMYDATA = {
+            id: `${parentId}1`,
+            parent_id: parentId,
+            role: 'assistant',
+            text: 'THIS IS MY DUMMY MESSAGE',
+        }
+
+        setMessages([...messages, DUMMYDATA])
+        setNewMessage(DUMMYDATA)
+        setChatMessages([...chatMessages, DUMMYDATA])
     }
 
     const newBranch = async (newparentid, getMessage, message) => {
