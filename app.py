@@ -30,8 +30,17 @@ def generate_model_random_key(length=10):
 
 class Message(BaseModel):
     id: str
+    parent_id: Optional[str] = None
     role: str
     content: str
+
+class messageToFrontend(BaseModel):
+    id: str
+    parent_id: Optional[str] = None
+    role: str
+    text: str
+
+
 
 class openAIMessages(BaseModel):
     role: str
@@ -78,7 +87,7 @@ app.add_middleware(
 def convert_to_openai_messages(messages: List[Message]) -> List[openAIMessages]:
     return [openAIMessages(role=msg.role, content=msg.content) for msg in messages]
 
-default_message: Message = Message(id="0", role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas. Always give one idea and one idea only. Never give more than one idea")
+default_message: Message = Message(id="0", parent_id=None, role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas. Always give one idea and one idea only. Never give more than one idea")
 
 default_json_value = DataValue(type=Choices.system, messages=[default_message], parent=None, children=[])
 
@@ -106,7 +115,8 @@ async def message(req: MessageRequest):
     print("parent_data is", parent_data)
     parent_messages = parent_data.messages
     userRandomValue = generate_model_random_key()
-    new_message = Message(id=userRandomValue, role="user", content=query)
+    new_message = Message(id=userRandomValue, parent_id=old_id, role="user", content=query)
+    print("the parent id is", new_message.parent_id)
 
     # Make user block
     user_messages = parent_messages + [new_message]
@@ -127,7 +137,7 @@ async def message(req: MessageRequest):
     model_reply = chat.choices[0].message.content
 
     model_random_key = generate_model_random_key()
-    new_messages.append(Message(id=model_random_key, role="assistant", content=model_reply))
+    new_messages.append(Message(id=model_random_key, parent_id=userRandomValue, role="assistant", content=model_reply))
    
     model_response_block = DataValue(type=Choices.assistant, messages=new_messages, parent=userKey, children=[])
     model_response_key = f'{username}/{model_random_key}'
@@ -140,6 +150,9 @@ async def message(req: MessageRequest):
     r.set(parent_key,  json.dumps(parent_data.model_dump()))
     send_to_user = ReturnValue(id=model_random_key, parent_id=userRandomValue, role="assistant", text=model_reply)
     return send_to_user.model_dump()
+
+def convert_to_message_to_frontend(messages: List[Message]) -> List[messageToFrontend]:
+    return [messageToFrontend(id=msg.id, parent_id=msg.parent_id, role=msg.role, text=msg.content) for msg in messages]
 
 @app.post("/get-history")
 async def history(input: GetHistory):
@@ -154,13 +167,15 @@ async def history(input: GetHistory):
     print("id is", id)
     if key_exists:
         print("found key!")
-        value_raw= r.get(key)
+        value_raw = r.get(key)
         formatted_value = DataValue(**json.loads(value_raw))
         messages_list = formatted_value.messages
+        converted_messages = convert_to_message_to_frontend(messages_list)
         output = {
-            'Data': messages_list
+            'Data': converted_messages
         }
         return output
     
     else:
         raise HTTPException(status_code=404, detail="Key not found")
+
