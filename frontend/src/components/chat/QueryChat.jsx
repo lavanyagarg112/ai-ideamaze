@@ -5,6 +5,13 @@ const Query = ({ text, onClick, canChange }) => {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
     autoExpand(event.target);
@@ -44,6 +51,7 @@ const Query = ({ text, onClick, canChange }) => {
             ref={inputRef}
             value={inputValue}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Talk about your idea here"
             className={classes.input}
           />
