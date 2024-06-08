@@ -1,6 +1,7 @@
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from enum import Enum
 import json
 import os
 from openai import OpenAI
@@ -20,7 +21,7 @@ r = redis.Redis(
     password=os.getenv('REDIS_PASSWORD')
 )
 
-def generate_random_key(length=10):
+def generate_model_random_key(length=10):
     random_bytes = secrets.token_bytes(length)
     random_base64 = base64.b64encode(random_bytes).decode('utf-8')[:length]
     return random_base64
@@ -29,10 +30,21 @@ class Message(BaseModel):
     role: str
     content: str
 
+class Choices(Enum):
+    user = 'user'
+    system = 'system'
+    assistant = 'assistant'
+
+
+
 class DataValue(BaseModel):
+    type: Choices
     messages: List[Message]
-    parent: Optional[str]
-    children: List[str]
+    parent: Optional[str] = None
+    children: List[str] = []
+
+    class Config:
+        use_enum_values = True
 
 class MessageRequest(BaseModel):
     username: str
@@ -49,7 +61,7 @@ app = FastAPI()
 
 default_message: Message = Message(role="system", content="You are a helpful AI assistant whose job it is to give the user new ideas")
 
-default_json_value = DataValue(messages=[default_message], parent=None, children=[])
+default_json_value = DataValue(type=Choices.system, messages=[default_message], parent=None, children=[])
 
 @app.get("/")
 async def root():
@@ -57,40 +69,52 @@ async def root():
 
 @app.post("/send-message")
 async def message(req: MessageRequest):
+    print("got data!")
     username = req.username
     old_id = req.old_id
     query = req.query
     parent_key = f'{username}/{old_id}'
     print(username, old_id, query, parent_key)
-
     parent_data_raw = r.get(parent_key)
-    if not parent_data_raw and username + '/0' not in r.keys():
-        r.set(username + '/0', json.dumps(default_json_value.model_dump()))
-        parent_data_raw = r.get(parent_key)
-   
-    if not parent_data_raw:
+
+    if old_id != '0' and not parent_data_raw:
         raise HTTPException(500, detail="Man something went wrong!")
+    elif old_id == '0' and not parent_data_raw:
+       r.set(parent_key, json.dumps(default_json_value.model_dump())) 
    
+    parent_data_raw = r.get(parent_key)
     parent_data = DataValue(**json.loads(parent_data_raw))
-    print(parent_data)
+    print("parent_data is", parent_data)
     parent_messages = parent_data.messages
     new_message = Message(role="user", content=query)
-   
-    new_messages = parent_messages + [new_message.model_dump()]
-   
+
+    # Make user block
+    user_messages = parent_messages + [new_message.model_dump()]
+    user_parent = parent_key
+    userBlock = DataValue(type=Choices.user, messages=user_messages, parent=user_parent, children=[])
+    userRandomValue = generate_model_random_key()
+    userKey = f'{username}/{userRandomValue}'
+    # set user_key as child of parent
+    parent_data.children.append(userKey)
+
+    print("user block key is", userKey)
+    
+    # make GPTresponse block
+    new_messages = user_messages
     chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=new_messages)
     model_reply = chat.choices[0].message.content
    
     new_messages.append(Message(role="assistant", content=model_reply).model_dump())
    
-    new_value = DataValue(messages=new_messages, parent=parent_key, children=[])
-    random_key = generate_random_key()
-    new_key = f'{username}/{random_key}'
-    print(new_value)
-    r.set(new_key, json.dumps(new_value.model_dump()))
-   
-    parent_data.children.append(new_key)
-    r.set(parent_key, json.dumps(parent_data.model_dump()))
-   
-    send_to_user = ReturnValue(id=random_key, parent_id=old_id, role="user", text=model_reply)
+    model_response_block = DataValue(type=Choices.assistant, messages=new_messages, parent=userKey, children=[])
+    model_random_key = generate_model_random_key()
+    model_response_key = f'{username}/{model_random_key}'
+
+    print("model block key is", model_response_key)
+    userBlock.children.append(model_response_key)
+    print(model_response_block)
+    r.set(model_response_key, json.dumps(model_response_block.model_dump()))
+    r.set(userKey, json.dumps(userBlock.model_dump()))   
+    r.set(parent_key,  json.dumps(parent_data.model_dump()))
+    send_to_user = ReturnValue(id=model_random_key, parent_id=userKey, role="user", text=model_reply)
     return send_to_user.model_dump()
