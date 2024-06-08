@@ -36,7 +36,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
 
   return (
     <div className={classes.scrollablecontent}>
-      <Query text={'To create a new idea branch, click on the respective blue box, and then, click on "Generate New Idea" to explore a new idea branch. \n\nTo continue the conversation from any previous branch, click on the last box of that branch.'} onClick={() => newBranch('0', false, '')} canChange={false} />
+      <Query text={'To create a new idea branch, click on the relevant box, and then, click on "Generate New Idea" to explore a new idea branch. \n\nTo continue the conversation from any previous branch, click on the last box of that branch.'} onClick={() => newBranch('0', false, '')} canChange={false} />
       <Query text={`Username: ${userName}`} onClick={() => newBranch('0', false, '')} canChange={false} />
       <div>
         {console.log("messages: ", messages)}
@@ -44,7 +44,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
           if (message.role === 'user') {
             return <Query key={message.id} text={message.text} onClick={() => handleClick(message.id)} canChange={false}/>
           } else if (message.role === 'assistant') {
-            return <Response key={message.id} text = {message.text} />
+            return <Response key={message.id} text = {message.text} onClick={() => handleClick(message.id)} />
           } else {
             return
           }
@@ -57,7 +57,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
           : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
         ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
           ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
-          : null
+          : <button onClick={() => addMessage(currentLatest.parent_id)} className={classes.button}>Give me a different idea</button>
         }
         
 

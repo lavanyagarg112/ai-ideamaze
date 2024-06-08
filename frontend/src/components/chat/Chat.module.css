@@ -48,7 +48,7 @@
     border: 1px solid #ccc;
     background-color: lightyellow;
     height:fit-content;
-    /* cursor: pointer; */
+    cursor: pointer;
     color: black;
     margin: 10px;
     padding: 10px;
