@@ -54,7 +54,7 @@ const buildNodesAndEdges = (messages, onClick) => {
   return { nodes, edges };
 };
 
-const Maze = ({ onClick, addNode, allMessages }) => {
+const Maze = ({ onClick, addNode }) => {
   const [messages, setMessages] = useState([
     {
       id: 0,
