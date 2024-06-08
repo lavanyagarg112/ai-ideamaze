@@ -79,6 +79,7 @@ class SiblingRequest(BaseModel):
     username: str
     user_query_id: str
 
+GPT_3 = "gpt-3.5-turbo"
 
 app = FastAPI()
 app.add_middleware(
@@ -138,7 +139,7 @@ async def message(req: MessageRequest):
     print("the type is", type(new_messages[0]))
 
     send_to_openAI_format = list(convert_to_openai_messages(new_messages))
-    chat = client.chat.completions.create(model="gpt-3.5-turbo", messages=send_to_openAI_format)
+    chat = client.chat.completions.create(model=GPT_3, messages=send_to_openAI_format)
     model_reply = chat.choices[0].message.content
 
     model_random_key = generate_model_random_key()
@@ -220,10 +221,41 @@ async def makeSibling(input: SiblingRequest):
     previous_answers = ""
     for i in range(len(children)):
         ans = await get_content(children[i])
-        to_add = "The" + i + ordinal(i) + " response is " + ans
+        to_add = "The " + str(ordinal(i+1)) + " response is " + ans + "\n"
         previous_answers += to_add
+
+    print("PREVIOUS ANSWERS: \n \n", previous_answers)
     question = await get_content(key)
-    prompt = "The user is asking" + question + "." + "The previous response are" + previous_answers
+    prompt = "The user is asking " + question + ". " + "The previous responses are " + previous_answers + "Give different ideas than the ones above" 
+    print("prompt to openai is", prompt)
+
+
+    old_messages = await get_messages(key)
+    
+
+    
+    prev_messages = convert_to_openai_messages(old_messages)
+    messages_to_send_to_OpenAI = prev_messages + [openAIMessages(role="user", content=prompt)] 
+    chat = client.chat.completions.create(model=GPT_3, messages=messages_to_send_to_OpenAI)
+    model_reply = chat.choices[0].message.content
+
+    # making model response data
+    model_response_id = generate_model_random_key()
+    GPT_response_key = f'{username}/{model_response_id}'
+    formatted_value.children.append(GPT_response_key)
+    model_response_message = Message(id=model_response_id, parent_id=user_query_id, role="assistant", content=model_reply)
+    final_messages = old_messages + [model_response_message] 
+    # make new GPT response block
+    model_response_block = DataValue(type=Choices.assistant, messages=final_messages, parent=key, children=[])
+    r.set(key, json.dumps(formatted_value.model_dump()))
+    r.set(GPT_response_key, json.dumps(model_response_block.model_dump()))
+    print("\n\n\n")
+    print(model_response_block)
+
+    return ReturnValue(id=model_response_id, parent_id=user_query_id, role="assistant", text=model_reply)
+
+
+
 
 
 @app.post('/check-children')
