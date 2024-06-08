@@ -10,8 +10,8 @@ You can find the deployed application here: [AI IdeaMaze](https://ai-ideamaze-k2
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
-3. [Usage](#usage)
-4. [Resources](#resources)
+3. [Resources](#resources)
+4. [Future Scope](#future-scope)
 5. [User Manual](#user-manual)
 
 ## Introduction
@@ -44,16 +44,18 @@ Join us on this journey of discovery and innovation. Let IdeaMaze's AI companion
 - **AI Api:** OpenAi
 - **Deployment:** Render
 
-## Usage
-
-For a detailed guide on how to use AI IdeaMaze, refer to the [User Manual](#user-manual) section.
-
 ## Resources
 
 Throughout this project, the following resources were quite helpful as we were new to these technologies -
 
 - [ReactFlow library documentation](https://reactflow.dev/)
 - [Redis Docs](https://redis.io/docs/latest/)
+
+## Future scope
+
+Some of the future scope for our project includes but is not limited to:
+- Personalised prompts for new ideas in order to get more targeted ideas
+- Collaborative sessions for teams to brainstorm together
 
 ## User Manual
 
