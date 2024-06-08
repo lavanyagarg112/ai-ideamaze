@@ -75,6 +75,11 @@ class GetHistory(BaseModel):
     username: str
     id: str
 
+class SiblingRequest(BaseModel):
+    username: str
+    user_query_id: str
+
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -148,6 +153,7 @@ async def message(req: MessageRequest):
     r.set(model_response_key, json.dumps(model_response_block.model_dump()))
     r.set(userKey, json.dumps(userBlock.model_dump()))   
     r.set(parent_key,  json.dumps(parent_data.model_dump()))
+    print("\n\n userBlock is", userBlock)
     send_to_user = ReturnValue(id=model_random_key, parent_id=userRandomValue, role="assistant", text=model_reply)
     return send_to_user.model_dump()
 
@@ -179,3 +185,66 @@ async def history(input: GetHistory):
     else:
         raise HTTPException(status_code=404, detail="Key not found")
 
+async def get_content(key: str) -> str:
+    value_raw = r.get(key)
+    formatted_value = DataValue(**json.loads(value_raw))
+    return (formatted_value.messages[-1].content)
+
+def ordinal(n: int) -> str:
+    if 11 <= n % 100 <= 13:
+        suffix = 'th'
+    else:
+        suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+    return str(n) + suffix
+
+async def get_messages(key: str) -> List[Message]:
+    value_raw = r.get(key)
+    formatted_value = DataValue(**json.loads(value_raw))
+    return (formatted_value.messages)
+ 
+
+
+@app.post('/make-sibling')
+async def makeSibling(input: SiblingRequest):
+    print("HI")
+    username = input.username
+    user_query_id = input.user_query_id
+    key = f'{username}/{user_query_id}'
+    key_exists = bool(r.exists(key))
+    if not key_exists:
+        raise HTTPException(status_code=404, detail="Key not found")
+    
+    value_raw = r.get(key)
+    formatted_value = DataValue(**json.loads(value_raw))
+    children = formatted_value.children
+    previous_answers = ""
+    for i in range(len(children)):
+        ans = await get_content(children[i])
+        to_add = "The" + i + ordinal(i) + " response is " + ans
+        previous_answers += to_add
+    question = await get_content(key)
+    prompt = "The user is asking" + question + "." + "The previous response are" + previous_answers
+
+
+@app.post('/check-children')
+async def checkChildren(input: GetHistory):
+    username = input.username
+    id = input.id
+    key = f'{username}/{id}'
+    key_exists = bool(r.exists(key))
+    print(key_exists)
+    print("username is", username)
+    print("id is", id)
+    if key_exists:
+        print("found key!")
+        value_raw = r.get(key)
+        formatted_value = DataValue(**json.loads(value_raw))
+        ans = len(formatted_value.children) > 0
+        output = {
+            "exists": ans
+        }
+
+        return output
+    else:
+        raise HTTPException(404, "No such key!")
+ 
