@@ -14,5 +14,16 @@
             "role": "response", 
             "text": "this is the GPT response"
         }
+    }, {
+        "endpoint": "get-history", 
+        "type": "GET", 
+        "expects": {
+            "username": "pradyu",
+            "id": "tgfiurhejkc"
+        }, 
+
+        "returns": {
+            
+        }
     }
 ]
