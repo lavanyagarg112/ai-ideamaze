@@ -47,57 +47,6 @@ const Home = () => {
         });
     }, []);
 
-    const DUMMY_DATA = [
-        {
-            id: '0',
-            parent_id: '0',
-            role: 'user',
-            text: 'This is my first query'
-        },
-        {
-            id: '1',
-            parent_id: '0',
-            role: 'assistant',
-            text: 'This is my message'
-        },
-        {
-            id: '2',
-            parent_id: '1',
-            role: 'user',
-            text: 'This is a new query'
-        },
-        {
-            id: '3',
-            parent_id: '2',
-            role: 'assistant',
-            text: 'This is my new message'
-        },
-        {
-            id: '4',
-            parent_id: '3',
-            role: 'user',
-            text: 'This is a new query'
-        },
-        {
-            id: '5',
-            parent_id: '4',
-            role: 'assistant',
-            text: 'This is my new message'
-        },
-        {
-            id: '6',
-            parent_id: '5',
-            role: 'user',
-            text: 'This is a new query'
-        },
-        {
-            id: '7',
-            parent_id: '6',
-            role: 'assistant',
-            text: 'This is my new message'
-        },
-    ]
-
     const handleClick = async (newid) => {
         if (newid !== '-1'){
             const data = {
