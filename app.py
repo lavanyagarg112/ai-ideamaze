@@ -131,7 +131,7 @@ async def message(req: MessageRequest):
     r.set(model_response_key, json.dumps(model_response_block.model_dump()))
     r.set(userKey, json.dumps(userBlock.model_dump()))   
     r.set(parent_key,  json.dumps(parent_data.model_dump()))
-    send_to_user = ReturnValue(id=model_random_key, parent_id=userKey, role="assistant", text=model_reply)
+    send_to_user = ReturnValue(id=model_random_key, parent_id=userRandomValue, role="assistant", text=model_reply)
     return send_to_user.model_dump()
 
 @app.post("/get-history")
