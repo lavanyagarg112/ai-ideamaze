@@ -19,7 +19,7 @@ const Home = () => {
     const [chatMessages, setChatMessages] = useState([]);
 
     const removeUser = async (username) => {
-        const responseFetch = await fetch('https://ai-ideamaze.onrender.com/remove-user', {
+        const responseFetch = await fetch(`${process.env.REACT_APP_API_URL}/remove-user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const Home = () => {
                 username: user,
                 id: newid,
             }
-            const responseFetch = await fetch('https://ai-ideamaze.onrender.com/get-history', {
+            const responseFetch = await fetch(`${process.env.REACT_APP_API_URL}/get-history`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const Home = () => {
             user_query_id: parentId,
         }
 
-        const responseFetch = await fetch('https://ai-ideamaze.onrender.com/make-sibling', {
+        const responseFetch = await fetch(`${process.env.REACT_APP_API_URL}/make-sibling`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const Home = () => {
                 query: message,
             }
             // send api
-            const responseFetch = await fetch('https://ai-ideamaze.onrender.com/send-message', {
+            const responseFetch = await fetch(`${process.env.REACT_APP_API_URL}/send-message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

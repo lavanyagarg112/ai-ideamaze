@@ -15,7 +15,7 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest}) => {
       username: userName,
       id: checkid
     }
-    const responseFetch = await fetch('https://ai-ideamaze.onrender.com/check-children', {
+    const responseFetch = await fetch(`${process.env.REACT_APP_API_URL}/check-children`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
