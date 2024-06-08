@@ -44,7 +44,7 @@ const Query = ({ text, onClick, canChange }) => {
             ref={inputRef}
             value={inputValue}
             onChange={handleInputChange}
-            placeholder="Type your query..."
+            placeholder="Talk about your idea here"
             className={classes.input}
           />
           <button onClick={handleSubmit} className={classes.button}>Submit</button>
