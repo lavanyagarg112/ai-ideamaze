@@ -15,6 +15,9 @@ const Navigation = () => {
     <div className={classes.navigation}>
       <div className={classes.header}>AI IdeaMaze</div>
       <nav className={classes.navbar}>
+      <button className={classes.navButton}>
+          <Link to="/aboutus" className={classes.buttonLink}>About Us</Link>
+        </button>
         <button className={classes.navButton} onClick={handleReload}>
           <Link to="/" className={classes.buttonLink}>New Maze</Link>
         </button>

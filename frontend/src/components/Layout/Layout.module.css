@@ -31,6 +31,7 @@
   .navbar {
     display: flex;
     align-items: center;
+    margin-right: 3rem;
   }
   
   .navList {
@@ -55,7 +56,7 @@
     color: blue;
     border: none;
     padding: 10px 20px;
-    margin: 3rem;
+    margin: 1rem;
     cursor: pointer;
     border-radius: 5px;
   }
