@@ -38,7 +38,9 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
     currentLatest && checkChildren(currentLatest.id);
   }, [currentLatest]);
 
-  
+  useEffect(() => {
+    setShowQuery(false)
+  }, [])
 
   return (
     <div className={classes.scrollablecontent}>
@@ -62,7 +64,10 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
           ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
           : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
         ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
-          ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
+          ? <div className={classes.buttonArea}> 
+              <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
+              <button onClick={handlenewConvoClick} className={classes.button}>Add more context</button>
+            </div>
           : (!showQuery && (<div className={classes.buttonArea}> 
               <button onClick={() => addMessage(currentLatest.parent_id)} className={classes.button}>Give me a different idea</button>
               <button onClick={handlenewConvoClick} className={classes.button}>Continue new conversation</button>
