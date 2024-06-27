@@ -37,6 +37,7 @@ Join us on this journey of discovery and innovation. Let IdeaMaze's AI companion
 - **Efficient Brainstorming:** Maximize your creativity and productivity by exploring every potential idea.
 - **Dual Interfaces:** Choose between a graph view for visualizing connections and a chat interface indepth brainstorming.
 - **Interactive Interface:** Engage with an interactive and user-friendly platform designed for efficient idea generation.
+- **Custom Prompts:** Forgot to add more context to your prompt? Or simply want to continue a new branch of conversation from a previous response? Our application is here to save the day!
 
 ## Technology Stack
 
@@ -56,7 +57,6 @@ Throughout this project, the following resources were quite helpful as we were n
 ## Future scope
 
 Some of the future scope for our project includes but is not limited to:
-- Personalised prompts for new ideas in order to get more targeted ideas
 - Mobile friendly
 - Collaborative sessions for teams to brainstorm together
 
@@ -102,6 +102,10 @@ Visit [AI IdeaMaze](https://ai-ideamaze-k2h1.onrender.com/) and bookmark the pag
 - At any point in your exploration, click “Generate New Idea” or "Give me a different Idea" to generate new ideas.
 - Each branch creates a new path of questions and ideas.
 - Navigate easily between different branches by simply clicking on them to ensure comprehensive brainstorming.
+
+#### Custom Prompts
+- Add More Context: Click on any of your query to add more context to that specific point in the conversation. This allows for deeper exploration of a particular idea.
+- Continue New Path: Click on any response from the AI to start a new path of conversation from that response. This enables branching out from any point and exploring new directions.
 
 #### Navigating Paths and the Maze
 - Click on any point in your idea path to revisit and explore further.
