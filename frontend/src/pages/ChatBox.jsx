@@ -10,6 +10,12 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
   const currentLatest = messages[messages.length - 1]
   const [children, setChildren] = useState(false)
 
+  const [showQuery, setShowQuery] = useState(false)
+
+  const handlenewConvoClick = () => {
+    setShowQuery(true)
+  }
+
   const checkChildren = async (checkid) => {
     const data = {
       username: userName,
@@ -57,8 +63,13 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
           : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
         ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
           ? <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
-          : <button onClick={() => addMessage(currentLatest.parent_id)} className={classes.button}>Give me a different idea</button>
+          : (!showQuery && (<div className={classes.buttonArea}> 
+              <button onClick={() => addMessage(currentLatest.parent_id)} className={classes.button}>Give me a different idea</button>
+              <button onClick={handlenewConvoClick} className={classes.button}>Continue new conversation</button>
+            </div>)) ||
+            (showQuery && messages && <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />)
         }
+
         
 
       </div>
