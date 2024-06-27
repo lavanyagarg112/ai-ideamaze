@@ -5,16 +5,28 @@ import Response from '../components/chat/ResponseChat'
 
 import classes from './Home.module.css'
 
-const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick}) => {
+const ChatBox = ({messages = [], addMessage, newBranch, userName, latest, handleClick}) => {
 
   const currentLatest = messages[messages.length - 1]
   const [children, setChildren] = useState(false)
 
   const [showQuery, setShowQuery] = useState(false)
+  const [showAssistantQuery, setShowAssistantQuery] = useState(false)
 
   const handlenewConvoClick = () => {
+    setShowAssistantQuery(true)
+  }
+
+  const handlenewContextClick = () => {
     setShowQuery(true)
   }
+
+  const handleNewBranch = (id, canChange, message) => {
+    newBranch(id, canChange, message)
+    setShowQuery(false)
+    setShowAssistantQuery(false)
+  }
+
 
   const checkChildren = async (checkid) => {
     const data = {
@@ -38,10 +50,6 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
     currentLatest && checkChildren(currentLatest.id);
   }, [currentLatest]);
 
-  useEffect(() => {
-    setShowQuery(false)
-  }, [])
-
   return (
     <div className={classes.scrollablecontent}>
       <Query text={'To create a new idea branch, click on the relevant box, and then, click on "Generate New Idea" to explore a new idea branch. \n\nTo continue the conversation from any previous branch, click on the last box of that branch.'} onClick={() => newBranch('0', false, '')} canChange={false} />
@@ -61,18 +69,19 @@ const ChatBox = ({messages, addMessage, newBranch, userName, latest, handleClick
         {console.log("LATEST: ", currentLatest)}
         {(currentLatest && !children) || latest.length === 0  ? (
           messages.length === 0
-          ? <Query text='add query here' onClick={(message) => newBranch('0', true, message)} canChange={true} />
-          : <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
+          ? <Query text='add query here' onClick={(message) => handleNewBranch('0', true, message)} canChange={true} />
+          : <Query text='add query here' onClick={(message) => handleNewBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />
         ) : currentLatest.role === 'user' && checkChildren(currentLatest.id)
-          ? <div className={classes.buttonArea}> 
-              <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
-              <button onClick={handlenewConvoClick} className={classes.button}>Add more context</button>
-            </div>
-          : (!showQuery && (<div className={classes.buttonArea}> 
+          ? (!showQuery ? (<div className={classes.buttonArea}> 
+            <button onClick={() => addMessage(currentLatest.id)} className={classes.button}>Generate New Idea</button>
+            <button onClick={handlenewContextClick} className={classes.button}>Add more context</button>
+          </div>) :
+          <Query text='add query here' onClick={(message) => handleNewBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />)
+          : (!showAssistantQuery ? (<div className={classes.buttonArea}> 
               <button onClick={() => addMessage(currentLatest.parent_id)} className={classes.button}>Give me a different idea</button>
               <button onClick={handlenewConvoClick} className={classes.button}>Continue new conversation</button>
-            </div>)) ||
-            (showQuery && messages && <Query text='add query here' onClick={(message) => newBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />)
+            </div>) : (
+            <Query text='add query here' onClick={(message) => handleNewBranch(currentLatest.id, true, message)} canChange={true} addNew={() => addMessage(currentLatest.parent_id)} />))
         }
 
         
