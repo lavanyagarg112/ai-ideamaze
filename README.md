@@ -1,8 +1,6 @@
 
 # AI IdeaMaze
 
-Note: The website is currently down as we work on new features!
-
 ## Collaborators
 - [Lavanya Garg](https://github.com/lavanyagarg112)
 - [Pradyumna Shyama Prasad](https://github.com/pradyuprasad)
