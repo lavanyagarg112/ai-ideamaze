@@ -115,11 +115,6 @@ Visit [AI IdeaMaze](https://ai-ideamaze-k2h1.onrender.com/) and bookmark the pag
 - Choose between a graph view for visualizing connections and a chat interface for in-depth brainstorming.
 - Both interfaces allow for seamless switching, ensuring a comprehensive and flexible brainstorming experience.
 
-#### AI-Powered Suggestions
-- Receive AI-powered suggestions to enhance your brainstorming process.
-- Use these suggestions to explore new directions and generate more ideas.
-- Incorporate suggestions into your current path or start a new branch.
-
 #### User Experience
 - Intuitive and user-friendly interface designed for efficient idea generation.
 - Engage with an interactive platform that maximizes creativity and productivity.
@@ -128,4 +123,4 @@ Visit [AI IdeaMaze](https://ai-ideamaze-k2h1.onrender.com/) and bookmark the pag
 - The interface is clean with no unnecessary components.
 
 ### 4. Troubleshooting
-If you encounter issues, try refreshing the page or logging out and back in. Clear your browser cache for persistent problems.
+If you encounter issues, try refreshing the page. Clear your browser cache for persistent problems.
