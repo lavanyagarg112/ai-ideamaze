@@ -7,6 +7,8 @@
 
 You can find the deployed application here: [AI IdeaMaze](https://ai-ideamaze-k2h1.onrender.com/)
 
+Note: currently deactivated as the db is down. We will fix this as soon as possible.
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
